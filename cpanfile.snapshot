@@ -752,6 +752,13 @@ DISTRIBUTIONS
       Data::Page 2
       ExtUtils::MakeMaker 0
       Test::More 0.1
+  Data-UUID-1.220
+    pathname: R/RJ/RJBS/Data-UUID-1.220.tar.gz
+    provides:
+      Data::UUID 1.220
+    requirements:
+      Digest::MD5 0
+      ExtUtils::MakeMaker 0
   Devel-GlobalDestruction-0.13
     pathname: H/HA/HAARG/Devel-GlobalDestruction-0.13.tar.gz
     provides:
