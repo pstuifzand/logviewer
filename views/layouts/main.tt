@@ -10,9 +10,14 @@
 <!-- Optional theme -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
 
+<style>
+label {
+    font-weight:normal;
+}
+</style>
 </head>
 <body>
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-xs-12">
                 <h1>Log viewer</h1>
@@ -27,5 +32,10 @@
 /* ]]> */</script>
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script></script>
+<script>
+$('input[type="checkbox"]').change(function() {
+    $('form').submit();
+});
+</script>
 </body>
 </html>

@@ -1,31 +1,67 @@
+<form action="/search" method="get">
 <div class="row">
     <div class="col-xs-12">
-        <form action="/search" method="get">
-            <input type="text" class="col-xs-12" name="q" value="[% q | html %]">
-            <button class="btn btn-default">Search</button>
-        </form>
+        <input type="text" class="col-xs-12" name="q" value="[% q | html %]">
+        <input type="text" class="col-xs-12" value="[% qi | html %]">
+        <button class="btn btn-default">Search</button>
     </div>
 </div>
 <div class="row">
-    <div class="col-xs-12">
+    <div class="col-xs-2">
+    [% FOR filter IN filters %]
+        <h3>[% filter.name %]</h3>
+        [% FOR label IN filter.filters %]
+            <label style="white-space:nowrap;overflow:hidden" class="[% UNLESS label.count %]disabled[% END %]"><input type="checkbox" name="filter:[% filter.name %]:[% label.key %]" [% IF enabled_filters.item(label.name) %]checked[% END %] [% UNLESS label.count %]disabled[% END %]>&nbsp;[% label.label %]&nbsp;([% label.count %])</label><br>
+        [% END %]
+
+    [% END %]
+
+    </div>
+
+    <div class="col-xs-10">
         <br>
+        [% IF pager %]
+        <p>[% pager.total_entries %] results, from [% pager.first %] to [% pager.last %]</p>
+        [% END %]
         <table class="table">
+        <thead>
             <tr>
-                <th>Project</th>
                 <th>Date / Time</th>
+                <th>Project</th>
+                <th>Request ID</th>
                 <th>Message</th>
                 <th>Filename</th>
                 <th>Line</th>
             </tr>
+            </thead>
+            <tbody>
             [% FOR result IN results %]
             <tr>
-                <td>[% result.project %]</td>
                 <td>[% result.date %]</td>
+                <td>[% result.project %]</td>
+                <td><a href="/search?q=project:[% result.project | html %] AND attr_request_id:[% result.request_id %]">[% result.request_id %]</a></td>
                 <td>[% result.message %]</td>
                 <td>[% result.filename %]</td>
                 <td>[% result.line %]</td>
             </tr>
+            [%# FOR name IN result.field_names %]
+              <!--  <tr><th colspan=1 style="text-align:right">[% name %]</th><td colspan=4>[% result.fields.item(name) %]</td></tr>-->
+            [%# END %]
             [% END %]
+            </tbody>
         </table>
+        [% IF pager %]
+        <nav>
+          <ul class="pagination">
+            <li class="[% UNLESS pager.previous_page %]disabled[% END %]">
+              <a href="/search?[% IF pager.previous_page %]p=[% pager.previous_page %]&amp;[% END %]q=[% q | html %]">&laquo;</a>
+            </li>
+            <li class="[% UNLESS pager.next_page %]disabled[% END %]">
+              <a href="/search?[% IF pager.next_page %]p=[% pager.next_page %]&amp;[% END %]q=[% q | html %]">&raquo;</a>
+            </li>
+          </ul>
+        </nav>
+        [% END %]
     </div>
 </div>
+</form>

@@ -3,20 +3,23 @@ use strict;
 use warnings;
 use IO::Socket::IP;
 use JSON::XS 'encode_json';
+use Time::HiRes 'time';
 
 sub send_log {
-    my ($project, $message) = @_;
+    my ($project, $message, %additional) = @_;
 
-    my ($package,$filename,$line) = caller;
+    my ($package, $filename, $line) = caller;
 
     my $io = IO::Socket::IP->new(Proto => 'udp', PeerAddr => 'localhost', PeerPort => '5066');
+
     my $data = encode_json({
-            project  => $project,
-            date     => time,
-            package  => $package,
-            filename => $filename,
-            line     => $line,
-            message  => $message,
+        %additional,
+        project  => $project,
+        date     => time,
+        package  => $package,
+        filename => $filename,
+        line     => $line,
+        message  => $message,
     });
 
     $io->send($data, 4096);
