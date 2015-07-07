@@ -17,12 +17,17 @@ while ($io->recv($data, 4096)) {
 
     my $doc = {
         id => $id++,
-        date_i => $o->{date},
-        message_txt => $o->{message},
-        filename_s => $o->{filename},,
-        line_i => $o->{line},
-        project_s => $o->{project},
+        date_i => delete $o->{date},
+        message_txt => delete $o->{message},
+        filename_s => delete $o->{filename},
+        line_i => delete $o->{line},
+        project_s => delete $o->{project},
     };
+    for (keys %$o) {
+        $doc->{'attr_' . $_} = $o->{$_};
+    }
     $solr->add($doc);
+    print Dumper($doc);
 }
+
 

@@ -16,16 +16,25 @@ get '/' => sub {
 
 get '/search' => sub {
     my $q = param 'q';
+    my $qi = $q;
+    $qi =~ s/\bproject:/project_s:/g;
+    $qi =~ s/\bmessage:/message_txt:/g;
+    $q =~ s/date:/data_i:/g;
+    $qi =~ s/\bfilename:/filename_s:/g;
+    $qi =~ s/\bline:/line_i:/g;
     my $solr = WebService::Solr->new('http://localhost:8983/solr/logviewer');
     my @res;
     if ($q) {
         my $res = $solr->search(
-            WebService::Solr::Query->new({message_txt => $q}),
+            $qi,
+            #WebService::Solr::Query->new({message_txt => $q}),
             { fl => 'message_txt,project_s,date_i,id,filename_s,line_i'});
         if ($res->ok) {
             push @res, @{$res->docs};
+            print Dumper($res->docs);
         }
     }
+
     my @results;
     for my $doc (@res) {
         push @results, {
